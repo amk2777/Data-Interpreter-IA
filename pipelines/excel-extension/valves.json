@@ -1,1 +1,1 @@
-{}
+{"LLAMAINDEX_OLLAMA_BASE_URL": "http://host.docker.internal:11434", "LLAMAINDEX_REASONING_MODEL_NAME": "mistral-small3.2:latest", "LLAMAINDEX_PLAN_MODEL_NAME": "mistral-small3.1:latest", "LLAMAINDEX_CODE_MODEL_NAME": "mistral-small3.1:latest", "LLAMAINDEX_EMBEDDING_MODEL_NAME": "bge-m3:latest"}

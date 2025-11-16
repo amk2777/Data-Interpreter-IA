@@ -138,10 +138,15 @@ class Pipeline:
 
         try:
             # Initialize LLM models
+            # self.reasoning_model = OllamaLLM(
+            #     model=self.valves.LLAMAINDEX_REASONING_MODEL_NAME,
+            #     base_url="http://host.docker.internal:11434",
+            # )
             self.reasoning_model = OllamaLLM(
-                model=self.valves.LLAMAINDEX_REASONING_MODEL_NAME,
-                base_url="http://host.docker.internal:11434",
+                model=self.valves.LLAMAINDEX_REASONING_MODEL_NAME | "llama3.2:3b",
+                base_url=os.getenv("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
             )
+
             self.plan_model = OllamaLLM(
                 model=self.valves.LLAMAINDEX_PLAN_MODEL_NAME,
                 base_url="http://host.docker.internal:11434",
