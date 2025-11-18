@@ -1,6 +1,6 @@
-# Projet de Data Interpreter IA
+# Data Interpreter IA
 
-Ce projet est une application REST qui permet de traiter divers types de fichiers (à savoir .xls, .xlsx, .csv, .json, .pdf, .py) et de générer des analyses sur ces fichiers en utilisant un modèle de langage large (LLM). Il intègre des fonctionnalités d'extraction de texte, d'images, de données relationnelles et de code Python. Il utilise l'écosystème LangChain, des bases de données DuckDB, ainsi que FastAPI pour l'interface utilisateur.
+This project is a REST application that can process various types of files (namely .xls, .xlsx, .csv, .json, .pdf, .py) and generate analyses on these files using a large language model (LLM). It includes functionality for extracting text, images, relational data, and Python code. It uses the LangChain ecosystem, DuckDB databases, and FastAPI for the user interface.
 
 ## Table des matières
 
@@ -23,27 +23,27 @@ Ce projet est une application REST qui permet de traiter divers types de fichier
 
 ### Démarrage rapide en 5 minutes
 
-1. **Clonez et installez les dépendances :**
+1. **Clone & Install Dependencies :**
    ```bash
    git clone <URL_DU_PROJET>
    cd <nom_du_répertoire>
    pip install -r requirements.txt
    ```
 
-2. **Installez Ollama et les modèles :**
+2. **Install Ollama and fetch models :**
    ```bash
    # Installation Ollama
    curl -o- https://ollama.com/download.sh | bash
    
-   # Démarrage du service
+   # Deploy the service
    ollama serve
    
-   # Téléchargement des modèles (dans un autre terminal)
+   # Pull models
    ollama pull duckdb-nsql:latest
    ollama pull mistral-small3.1:latest
    ```
 
-3. **Lancez l'application :**
+3. **Launch application :**
    ```bash
    # Mode Terminal
    sh run_terminal.sh ./data
@@ -52,14 +52,14 @@ Ce projet est une application REST qui permet de traiter divers types de fichier
    sh run_pipelines.sh
    ```
 
-4. **Testez avec un fichier :**
+4. **Test :**
    ```bash
    curl -X POST "http://localhost:8000/query/" \
         -H "Content-Type: application/json" \
         -d '{"complex_query": "Analyse les données et donne-moi un résumé"}'
    ```
 
-## Architecture du système
+## System Architecture 
 
 ### Vue d'ensemble de l'architecture
 
@@ -81,14 +81,13 @@ Ce projet est une application REST qui permet de traiter divers types de fichier
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
-### Flux de traitement des données
-
-1. **Ingestion** : Upload et détection automatique du type de fichier
-2. **Extraction** : Parsing spécialisé selon le format (PDF→OCR, Excel→Tables, etc.)
-3. **Stockage** : Chargement dans DuckDB avec schéma optimisé
-4. **Planification** : Génération d'un plan d'analyse par le LLM
-5. **Exécution** : Génération et exécution de requêtes SQL/Python
-6. **Synthèse** : Analyse des résultats et génération de la réponse finale
+### Data Processing Flow
+1. **Ingestion** : Upload and automatic detection of file type
+2. **Extraction** : Specialized parsing by format (PDF→OCR, Excel→tables, etc.)
+3. **Stockage** : Load into DuckDB with optimized schema
+4. **Planification** : LLM generates an analysis plan
+5. **Exécution** : Generation and execution of SQL/Python queries
+6. **Synthèse** : Result analysis and final answer generation
 
 ### Présentation de l'algorithme du Data Interpreter sous forme de schéma
 
@@ -204,35 +203,34 @@ Vous pouvez tester l'API à l'aide d'un outil comme `Postman` ou `curl`.
 curl -X POST "http://localhost:8000/query/" -H "Content-Type: application/json" -d '{"complex_query": "Donne-moi les statistiques de ventes"}'
 ```
 
-## Fonctionnalités Clés
+## Key Features
 
-1. **Extraction de Texte et Images des PDF :** Le projet utilise `pdfminer.six` pour extraire le texte et `PyMuPDF` pour extraire les images des fichiers PDF.
-2. **Extraction de Texte par OCR :** `pytesseract` est utilisé pour extraire le texte des images présentes dans les PDF.
-3. **Analyse de Code Python :** Extraction des fonctions, classes, imports et autres éléments d'un fichier `.py` en utilisant le module `ast`.
-4. **Chargement de Données dans une Base DuckDB :** Les fichiers CSV, Excel, JSON, et PDF peuvent être chargés dans DuckDB.
-5. **Génération Automatique de Réponses et d'Outils :** Utilisation de modèles LLM (à partir de LangChain) pour générer des plans d'action, des requêtes SQL et des analyses complètes.
+- PDF Text and Image Extraction: Uses pdfminer.six for text and PyMuPDF for images.
+- OCR Text Extraction: Uses pytesseract for extracting text from images inside PDFs.
+- Python Code Analysis: Extracts functions, classes, imports, and more using ast.
+- Loading Data into DuckDB: Supports CSV, Excel, JSON, and PDF ingestion.
+- Automatic Response & Tool Generation: LLM-based planning, SQL generation, and analysis.
 
-## Organisation des Fichiers
+## File Organization
+- main.py: Main application script
+requirements.txt: List of dependencies
+README.md: This documentation file
+CHANGELOG.md: Version change log
+src/: Project source files
+pipelines/: Pipeline scripts for OpenWebUI
+.env: Environment variable configuration
+docker-compose.yml: Docker setup for OpenWebUI and pipeline
+run_pipelines.sh: Launches the OpenWebUI interface
+run_terminal.sh: Runs the data interpreter terminal mode
+version.py: Contains the current version of the deployed solution
 
-- `main.py` : Le script principal pour exécuter l'application.
-- `requirements.txt` : Liste des dépendances à installer.
-- `README.md` : Ce fichier de documentation.
-- `CHANGELOG.md` : Ce fichier récapitulatif des différentes versions du projet.
-- `src/`: Ce dossier contient les fichiers sources du projet. 
-- `pipelines/`: Ce dossier contient le script python de la sous solution sous forme de pipeline OpenWebui.
-- `.env`: Ce fichier contient les variables d'environnement essentielles pour une bonne exécution.
-- `docker-compose.yml`: Ce script Docker va permettre de mettre en place l'interface OpenWEBUI ainsi que son serveur Pipeline
-- `run_pipelines.sh`: Ce script sh va permettre de lancer l'interface OpenWEBUI.
-- `run_terminal.sh`: Ce script va permettre de lancer le data interpreter en mode terminal.
-- `version.py`: Ce fichier python référence la version actuelle de la solution déployée.
 
-## Exemples de Fichiers Supportés
-
-- **Excel (.xls, .xlsx, xlsm)** : Chargement de toutes les feuilles disponibles dans une base de données.
-- **CSV (.csv)** : Chargement dans une table DuckDB avec traitement préalable.
-- **JSON (.json)** : Normalisation des données imbriquées et chargement.
-- **PDF (.pdf)** : Extraction de texte et images avec OCR.
-- **Python (.py)** : Analyse et extraction du code, des fonctions, classes, et autres éléments Python.
+## Supported File Examples
+- **Excel (.xls, .xlsx, xlsm)** : Loads all sheets into a database
+- **CSV (.csv)** : Loads into DuckDB with preprocessing
+- **JSON (.json)** : Normalizes nested structures
+- **PDF (.pdf)** : Extracts text and images with OCR
+- **Python (.py)** : Analyzes code, functions, classes, etc.
 
 ## Exemples d'usage avancés
 
